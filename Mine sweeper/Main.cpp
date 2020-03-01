@@ -73,15 +73,22 @@ int main() {
 	}*/
 
 	CPlayer pesho(0, 4, false, "Pesho");
-	CPlayer ivan(pesho);
+	CPlayer ivan = pesho;
 
 	pesho.print();
 	ivan.print();
+	cout << endl;
+
+	//here the nick's for both pesho and ivan had to be changed
+	pesho.setNick("Mitko");
+
+	cout << pesho.getNick() << endl;
+	cout << ivan.getNick() << endl;
 	//When we delete the delete[] in the setter we can actually change the name
-	ivan.setNick("Ivan");
-	ivan.setState(true);
+	/*pesho.setNick("Hui");
+	pesho.setState(true);
 	ivan.setLives(10);
 	ivan.print();
-
+	pesho.print();*/
 	return 0;
 }

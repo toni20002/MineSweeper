@@ -10,6 +10,7 @@ public:
 	CPlayer(bool, const char *);
 
 	CPlayer& operator=(const CPlayer&);
+	CPlayer(const CPlayer&);
 
 	~CPlayer();
 

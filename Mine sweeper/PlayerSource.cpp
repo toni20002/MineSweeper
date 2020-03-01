@@ -38,7 +38,7 @@ CPlayer::CPlayer(unsigned lives, unsigned score, bool state, const char * nick):
 	{
 		this->state = state;
 	}
-	strcpy_s(this->nick, strlen(nick) + 1, nick);
+	strcpy_s(this->nick, strlen(nick)+1 , nick);
 }
 
 
@@ -53,6 +53,11 @@ CPlayer::CPlayer(bool state, const char * nick):state(true), nick(new char[strle
 
 
 //Copy constructor
+CPlayer::CPlayer(const CPlayer& adder) {
+//	nick = new char [strlen(nick) + 1];
+	this->nick = adder.nick;
+}
+
 CPlayer& CPlayer::operator=(const CPlayer& rhs) {
 	if (this != &rhs)
 	{
@@ -89,12 +94,12 @@ int CPlayer::setState(bool state) {
 }
 
 int CPlayer::setNick(const char * nick) {
-/*	if (nick != nullptr)
+	/*if (nick != nullptr)
 	{
 		delete[] nick;
 		nick = nullptr;
 	}*/
-	this->nick = new char[strlen(nick) + 1];
+	//this->nick = new char[strlen(nick) + 1];
 	strcpy_s(this->nick, strlen(nick) + 1, nick);
 	return 0;
 }
