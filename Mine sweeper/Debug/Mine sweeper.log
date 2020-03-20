@@ -1,3 +1,2 @@
-﻿  PlayerSource.cpp
-c:\users\user\source\repos\mine sweeper\mine sweeper\playersource.cpp(1): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+﻿  Main.cpp
   Mine sweeper.vcxproj -> C:\Users\User\source\repos\Mine sweeper\Debug\Mine sweeper.exe

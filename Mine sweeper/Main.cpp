@@ -1,94 +1,70 @@
-#include "Mine.h"
-#include "Player.h"
+#include "CEnemy.h"
+#include "CPlayer.h"
+#include "CBoard.h"
 #include <iostream>
 
 using namespace std;
 
 int main() {
-/*	CMine mine;
-	CMine mine1(20, '@');
-	CMine mine2(22, '&');
+	CEnemy enemy(10, '!');
+	cout << enemy << endl;
+	CEnemy enemy2, enemy3;
+	cout << enemy2 << endl;
+	cout << enemy3 << endl;
+	{
+		CEnemy * penemy = new CEnemy();
+		cout << *penemy << endl;
 
-	cout << "Mine default" << endl;
-	cout << mine.getCount() << endl;
-	cout << mine.getIcon() << endl;
-	unsigned x;
-	cin >> x;
-	mine.setCount(x);
-	cout << mine.getCount() << endl;
-	cout << mine.getIcon() << endl;
-
-	cout << mine1.getCount() << endl;
-	cout << mine1.getIcon() << endl;
-
-	cout << mine2.getCount() << endl;
-	cout << mine2.getIcon() << endl;
-
-	CMine * pointer = &mine;
-	pointer->setIcon('~');
-	cout << pointer->getCount() << endl;
-	cout << pointer->getIcon() << endl;
-
-	pointer = new CMine();
-	if (pointer != nullptr) {
-		delete pointer;
-		pointer = nullptr;
+		if (penemy != nullptr) {
+			delete penemy;
+			penemy = nullptr;
+		}
+		penemy = new CEnemy(20, '?');
+		cout << *penemy << endl;
+		if (penemy != nullptr) {
+			delete penemy;
+			penemy = nullptr;
+		}
 	}
 
-	pointer = new CMine(10, '!');
-	cout << pointer->getCount() << endl;
-	cout << pointer->getIcon() << endl;
+	CPlayer pesho(0, 4, true, "Pesho");
+	cout << pesho << endl;
+	cout << enemy << endl;
+	cout << "Enter a player in the following order: name, lives, score , state " << endl;
+	cin >> pesho;
+	cout << pesho << endl;
 
-	CMine defaultValue = CMine();
-	cout << "The value of the default constructor is:" << endl;
-	cout << defaultValue.getCount() << endl;
-	cout << defaultValue.getIcon() << endl;*/
-	/*CPlayer defaultPlayer;
-	cout << defaultPlayer.getNick() << endl;
-	cout << defaultPlayer.getLives() << endl;
-	cout << defaultPlayer.getScore() << endl;
-	cout << defaultPlayer.getState() << endl;
 
-	int newScore;
-	cout << "Enter the new score for the default player: ";
-	cin >> newScore;
+	cout << enemy << endl;
+	cout << "Enter an enemy in the order: count, icon " << endl;
+	cin >> enemy;
+	cout << enemy << endl;
 
-	defaultPlayer.setScore(newScore);
-	cout << "The new score is: " << defaultPlayer.getScore() << endl;
+	cout << "BOARD TEST" << endl;
+	CBoard testBoard;
+	testBoard.fillBoard();
+	cout << testBoard;
 
-	CPlayer player1("Jeko");
-	cout << "Player1 : ";
-	cout << player1.getNick() << endl;
+	cout << "SECOND BOARD" << endl;
+	CBoard secondBoard(4, 4);
+	secondBoard.fillBoard();
+	cout << secondBoard;
+	testBoard = secondBoard;
 
-	char * newNick = new char[15];
-	cin.ignore();
-	cin.getline(newNick, 15);
-	player1.setNick(newNick);
+	cout << "Changed test board - should be 4 by 4" << endl;
+	cout << testBoard << endl;
 
-	cout << "Player1's new nick is: " << player1.getNick() << endl;
 
-	if (newNick != nullptr) {
-		delete[] newNick;
-		newNick = nullptr;
-	}*/
+	CBoard copyBoard = testBoard;
+	cout << copyBoard;
 
-	CPlayer pesho(0, 4, false, "Pesho");
-	CPlayer ivan = pesho;
+	cout << "filled board" << endl;
+	copyBoard.createBoard();
+	cout << copyBoard;
 
-	pesho.print();
-	ivan.print();
-	cout << endl;
+	testBoard = copyBoard;
+	cout << "Test board with the copied values of copyBoard" << endl;
+	cout << testBoard;
 
-	//here the nick's for both pesho and ivan had to be changed
-	pesho.setNick("Mitko");
-
-	cout << pesho.getNick() << endl;
-	cout << ivan.getNick() << endl;
-	//When we delete the delete[] in the setter we can actually change the name
-	/*pesho.setNick("Hui");
-	pesho.setState(true);
-	ivan.setLives(10);
-	ivan.print();
-	pesho.print();*/
 	return 0;
 }
