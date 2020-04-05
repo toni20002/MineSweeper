@@ -5,10 +5,6 @@
 class CPlayer {
 
 public:
-
-	friend std::ostream& operator<<(std::ostream&, const CPlayer&);
-	friend std::istream& operator>>(std::istream&, CPlayer&);
-	
 	//default constructor
 	CPlayer();
 	
@@ -35,6 +31,9 @@ public:
 	char * getNick() const;
 
 	int print() const;
+
+	std::ostream& ins(std::ostream&) const;
+	std::istream& ext(std::istream&);
 
 private:
 	unsigned score;

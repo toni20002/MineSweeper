@@ -1,2 +1,21 @@
-﻿  Main.cpp
+﻿  CBoard.cpp
+c:\users\user\source\repos\mine sweeper\mine sweeper\cboard.cpp(11): warning C4018: '<': signed/unsigned mismatch
+c:\users\user\source\repos\mine sweeper\mine sweeper\cboard.cpp(26): warning C4018: '<': signed/unsigned mismatch
+c:\users\user\source\repos\mine sweeper\mine sweeper\cboard.cpp(38): warning C4018: '<': signed/unsigned mismatch
+c:\users\user\source\repos\mine sweeper\mine sweeper\cboard.cpp(46): warning C4018: '<': signed/unsigned mismatch
+c:\users\user\source\repos\mine sweeper\mine sweeper\cboard.cpp(62): warning C4018: '<': signed/unsigned mismatch
+c:\users\user\source\repos\mine sweeper\mine sweeper\cboard.cpp(67): warning C4018: '<': signed/unsigned mismatch
+c:\users\user\source\repos\mine sweeper\mine sweeper\cboard.cpp(69): warning C4018: '<': signed/unsigned mismatch
+c:\users\user\source\repos\mine sweeper\mine sweeper\cboard.cpp(89): warning C4018: '<': signed/unsigned mismatch
+c:\users\user\source\repos\mine sweeper\mine sweeper\cboard.cpp(96): warning C4018: '<': signed/unsigned mismatch
+c:\users\user\source\repos\mine sweeper\mine sweeper\cboard.cpp(98): warning C4018: '<': signed/unsigned mismatch
+c:\users\user\source\repos\mine sweeper\mine sweeper\cboard.cpp(112): warning C4018: '<': signed/unsigned mismatch
+c:\users\user\source\repos\mine sweeper\mine sweeper\cboard.cpp(120): warning C4018: '<': signed/unsigned mismatch
+c:\users\user\source\repos\mine sweeper\mine sweeper\cboard.cpp(132): warning C4018: '<': signed/unsigned mismatch
+c:\users\user\source\repos\mine sweeper\mine sweeper\cboard.cpp(139): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+c:\users\user\source\repos\mine sweeper\mine sweeper\cboard.cpp(142): warning C4018: '<': signed/unsigned mismatch
+c:\users\user\source\repos\mine sweeper\mine sweeper\cboard.cpp(161): warning C4018: '<': signed/unsigned mismatch
+c:\users\user\source\repos\mine sweeper\mine sweeper\cboard.cpp(163): warning C4018: '<': signed/unsigned mismatch
+c:\users\user\source\repos\mine sweeper\mine sweeper\cboard.cpp(238): warning C4018: '<': signed/unsigned mismatch
+c:\users\user\source\repos\mine sweeper\mine sweeper\cboard.cpp(240): warning C4018: '<': signed/unsigned mismatch
   Mine sweeper.vcxproj -> C:\Users\User\source\repos\Mine sweeper\Debug\Mine sweeper.exe

@@ -3,12 +3,12 @@
 #include <cstring>
 
 //Default constructor
-CPlayer::CPlayer():lives(2), score(100), state(true), nick(new char[10]) {
+CPlayer::CPlayer():lives(2), score(0), state(true), nick(new char[10]) {
 	strcpy_s(nick, 10, "Goshko" );
 }
 
 //Basic - first constructor
-CPlayer::CPlayer(const char * nick):lives(2), score(50), state(true), nick(new char[strlen(nick)+1]) {
+CPlayer::CPlayer(const char * nick):lives(2), score(0), state(true), nick(new char[strlen(nick)+1]) {
 	strcpy_s(this->nick, strlen(nick) + 1, nick);
 
 }
@@ -111,38 +111,32 @@ int CPlayer::print() const {
 	std::cout << "State: " << (state ? ":-)" : ":-(") << std::endl;
 	return 0;
 }
+std::ostream& CPlayer::ins(std::ostream& out) const {
+	return out << "Nick: " << nick << std::endl
+		<< "Lives: " << lives << std::endl
+		<< "Score: " << score << std::endl
+		<< "State: " << (state ? ":-P" : ":-(") << std::endl;
 
-std::ostream& operator<<(std::ostream& out, const CPlayer& rhs) {
-	out << "Nick: " << rhs.nick << std::endl;
-	out << "Lives: " << rhs.lives << std::endl;
-	out << "Score: " << rhs.score << std::endl;
-	if (rhs.state)
-	{
-		out << "State: :-P " << std::endl;
-	}
-	else out << "State: :-( " << std::endl;
-
-	return out;
 }
 
-std::istream& operator>>(std::istream& in, CPlayer& rhs) {
+std::istream& CPlayer::ext(std::istream& in) {
 	char * name = new char[30];
-
 	in >> name;
-	if (rhs.nick != nullptr)
-	{
-		delete[] rhs.nick;
-		rhs.nick = nullptr;
-	}
-	rhs.setNick(name);
-	in >> rhs.lives >> rhs.score >> rhs.state;
-
-
+	setNick(name);
+	in >> lives >> score >> state;
 	if (name != nullptr)
 	{
 		delete[] name;
 		name = nullptr;
 	}
 	return in;
+}
+
+std::ostream& operator<<(std::ostream& out, const CPlayer& rhs) {
+	return rhs.ins(out);
+}
+
+std::istream& operator>>(std::istream& in, CPlayer& rhs) {
+	return rhs.ext(in);
 }
 

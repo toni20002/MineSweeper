@@ -117,12 +117,16 @@
     <ClInclude Include="CBoard.h" />
     <ClInclude Include="CEnemy.h" />
     <ClInclude Include="CPlayer.h" />
+    <ClInclude Include="DeadlyEnemy.h" />
+    <ClInclude Include="SuperDeadlyEnemy.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CBoard.cpp" />
+    <ClCompile Include="DeadlyEnemy.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="CEnemy.cpp" />
     <ClCompile Include="CPlayer.cpp" />
+    <ClCompile Include="SuperDeadlyEnemy.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

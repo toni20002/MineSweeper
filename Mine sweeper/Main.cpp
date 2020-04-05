@@ -1,6 +1,7 @@
 #include "CEnemy.h"
 #include "CPlayer.h"
 #include "CBoard.h"
+#include "DeadlyEnemy.h"
 #include <iostream>
 
 using namespace std;
@@ -42,12 +43,12 @@ int main() {
 
 	cout << "BOARD TEST" << endl;
 	CBoard testBoard;
-	testBoard.fillBoard();
+	//testBoard.fillBoard();
 	cout << testBoard;
 
 	cout << "SECOND BOARD" << endl;
 	CBoard secondBoard(4, 4);
-	secondBoard.fillBoard();
+	//secondBoard.fillBoard();
 	cout << secondBoard;
 	testBoard = secondBoard;
 
@@ -59,12 +60,30 @@ int main() {
 	cout << copyBoard;
 
 	cout << "filled board" << endl;
-	copyBoard.createBoard();
+	copyBoard.createBoard(9,9,9);
 	cout << copyBoard;
 
 	testBoard = copyBoard;
 	cout << "Test board with the copied values of copyBoard" << endl;
 	cout << testBoard;
 
+	DeadlyEnemy dEnemy;
+	cout << dEnemy;
+	DeadlyEnemy dEenem2(20, '%', 100, 100, 100);
+	cout << dEenem2;
+	cout << "Enter deadly enemy in the order: icon, count, sound, duration, power" << endl;
+	cin >> dEenem2;
+	cout << dEenem2;
+
+	cout << "Enter board" << endl;
+	CBoard bbb;
+	cout << "BBB before createBoard: " << endl;
+	bbb.createBoard(6, 6, 6);
+	cout << bbb;
+
+	cin >> bbb;
+	bbb.createBoard(bbb.getRows(), bbb.getColumns(), bbb.getCountEnemy());
+	cout << "BBB after createBoard: " << endl;
+	cout << bbb;
 	return 0;
 }

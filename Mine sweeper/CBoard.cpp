@@ -5,19 +5,25 @@
 
 
 //default
-CBoard::CBoard():rows(5), columns(5) {
-	viewBoard = new int *[rows];
-	checkBoard = new int *[rows];
+	
+CBoard::CBoard():rows(5), columns(5), viewBoard(new int *[5]), checkBoard(new int *[5]) {
+
 	for (int i = 0; i < rows; i++)
 	{
 		viewBoard[i] = new int[columns];
 		checkBoard[i] = new int[columns];
 	}
 };
-
-CBoard::CBoard(unsigned rows, unsigned columns) {
-	this->rows = rows;
-	this->columns = columns;
+CBoard::CBoard(unsigned rows) :rows(rows), columns(5), viewBoard(new int*[5]), checkBoard(new int*[5]) {
+	for (int i = 0; i < rows; i++)
+	{
+		viewBoard[i] = new int[columns];
+		checkBoard[i] = new int[columns];
+	}
+}
+CBoard::CBoard(unsigned rows, unsigned columns):rows(rows), columns(columns) {
+	//this->rows = rows;
+//	this->columns = columns;
 
 	viewBoard = new int*[rows];
 	checkBoard = new int *[rows];
@@ -31,6 +37,11 @@ CBoard::CBoard(unsigned rows, unsigned columns) {
 	}
 
 };
+//TODO
+CBoard::CBoard(unsigned rows, unsigned columns, unsigned countEnemies):rows(rows), columns(columns), countEnemies(countEnemies) {
+
+}
+
 
 CBoard::~CBoard() {
 
@@ -105,17 +116,41 @@ CBoard& CBoard::operator=(const CBoard &rhs) {
 	return *this;
 }
 
-CBoard CBoard::createBoard()
+int CBoard::createBoard(unsigned rows, unsigned columns, unsigned countEnemy)
 {
-	srand(time(NULL));
-	int bombs;
-	int randRow, randCol;
-
-	if (rows < 9 && columns < 9)
+	if (viewBoard != NULL)
 	{
-		bombs = rows;
+		for (int i = 0; i < this->rows; i++)
+		{
+			delete[] viewBoard[i];
+		}
+		delete[] viewBoard;
 	}
-	for (int l = 0; l < bombs; l++)
+	if (checkBoard != NULL)
+	{
+		for (int i = 0; i < this->rows; i++)
+		{
+			delete[] checkBoard[i];
+		}
+		delete[] checkBoard;
+	}
+	this->rows = rows;
+	this->columns = columns;
+	this->countEnemy = countEnemy;
+
+	viewBoard = new int*[rows];
+	checkBoard = new int *[rows];
+		for (int i = 0; i < rows; i++)
+		{
+			viewBoard[i] = new int[columns] {0};
+			checkBoard[i] = new int[columns] {0};
+		}
+
+
+	srand(time(NULL));
+	int randRow, randCol;
+	int enemyOnField = 0;
+	while (enemyOnField < countEnemy)
 	{
 		randRow = rand() % rows + 0;
 		randCol = rand() % columns + 0;
@@ -130,22 +165,175 @@ CBoard CBoard::createBoard()
 			randCol = rand() % columns + 0;
 			viewBoard[randRow][randCol] = -1;
 		}
-
+		enemyOnField++;
 	}
 
-	return CBoard();
-}
-
-CBoard CBoard::fillBoard()
-{
-	for (int i = 0; i < rows; i++)
+	enemyOnField = 0;
+	for (int k = 0; k < rows; k++)
 	{
-		for (int k = 0; k < columns; k++)
+		for (int l = 0; l < columns; l++)
 		{
-			viewBoard[i][k] = 0;
+			if (viewBoard[k][l] == -1)
+			{
+				for (int ii = ((k == 0) ? k : k -1); ii <= ((k == rows-1) ? k: k+1); ii++)
+				{
+					for (int jj = ((l == 0) ? l : l - 1); jj <= ((l == columns - 1) ? l : l +1); jj++)
+					{
+						if (viewBoard[ii][jj] != -1)
+						{
+							viewBoard[ii][jj]++;
+						}
+					}
+				}
+				enemyOnField++;
+			}
+			if (enemyOnField == countEnemy)
+			{
+				return 0;
+			}
 		}
 	}
-	return CBoard();
+
+	return 0;
+}
+
+int CBoard::createBoardWithEnemies(unsigned rows, unsigned columns, unsigned countEnemy) {
+	if (viewBoard != NULL)
+	{
+		for (int i = 0; i < this->rows; i++)
+		{
+			delete[] viewBoard[i];
+		}
+		delete[] viewBoard;
+	}
+	if (checkBoard != NULL)
+	{
+		for (int i = 0; i < this->rows; i++)
+		{
+			delete[] checkBoard[i];
+		}
+		delete[] checkBoard;
+	}
+	this->rows = rows;
+	this->columns = columns;
+
+	viewBoard = new int*[rows];
+	checkBoard = new int *[rows];
+	for (int i = 0; i < rows; i++)
+	{
+		viewBoard[i] = new int[columns] {0};
+		checkBoard[i] = new int[columns] {0};
+	}
+
+	srand(time(NULL));
+	int randRow, randCol;
+	int enemyOnField = 0;
+	
+	if (enemies != nullptr)
+	{
+		for (int i = 0; i < countEnemy; i++)
+		{
+			delete enemies[i];
+		}
+		delete[] enemies;
+	}
+	this->countEnemy = countEnemy;
+
+	//polimporphic container
+	enemies = new CEnemy*[countEnemy];
+	for (int i = 0; i < countEnemy; i++)
+	{
+		switch (rand() % 3) {
+		case 0: enemies[i] = new CEnemy();
+			break;
+		case 1: enemies[i] = new DeadlyEnemy();
+			break;
+		case 2: enemies[i] = new SuperDeadlyEnemy();
+			break;
+		}
+	}
+	unsigned index = 0;
+	while (enemyOnField < countEnemy)
+	{
+		randRow = rand() % rows + 0;
+		randCol = rand() % columns + 0;
+
+		if (viewBoard[randRow][randCol] != -1)
+		{
+			if (dynamic_cast<CEnemy*>(enemies[index]) != NULL)
+			{
+				viewBoard[randRow][randCol] = -1;
+			}
+			if (typeid(DeadlyEnemy*) == typeid(enemies[index]))
+			{
+				viewBoard[randRow][randCol] = -2;
+			}
+			if (typeid(SuperDeadlyEnemy*) == typeid(enemies[index]))
+			{
+				viewBoard[randRow][randCol] = -3;
+			}
+		}
+		else
+		{
+			randRow = rand() % rows + 0;
+			randCol = rand() % columns + 0;
+			if (dynamic_cast<CEnemy*>(enemies[index]) != NULL)
+			{
+				viewBoard[randRow][randCol] = -1;
+			}
+			if (typeid(DeadlyEnemy*) == typeid(enemies[index]))
+			{
+				viewBoard[randRow][randCol] = -2;
+			}
+			if (typeid(SuperDeadlyEnemy*) == typeid(enemies[index]))
+			{
+				viewBoard[randRow][randCol] = -3;
+			}
+		}
+		index++;
+		enemyOnField++;
+	}
+
+	enemyOnField = 0;
+
+	return 0;
+}
+
+//getters
+unsigned CBoard::getColumns() const {
+	return columns;
+}
+unsigned CBoard::getRows() const {
+	return rows;
+}
+unsigned CBoard::getCountEnemy() const {
+	return countEnemy;
+}
+int ** CBoard::getViewBoard() const {
+	return viewBoard;
+}
+int ** CBoard::getCheckBoard() const {
+	return checkBoard;
+}
+
+//setters
+int CBoard::setColumns(unsigned cols) {
+	if (cols > 0)
+	{
+		this->columns = cols;
+	}
+	return 0;
+}
+int CBoard::setRows(unsigned rows) {
+	if (rows > 0)
+	{
+		this->rows = rows;
+	}
+	return 0;
+}
+int CBoard::setCountEnemy(unsigned countEnemy) {
+	this->countEnemy = countEnemy;
+	return 0;
 }
 
 std::ostream & operator<<(std::ostream &out, const CBoard &rhs) {
@@ -159,4 +347,15 @@ std::ostream & operator<<(std::ostream &out, const CBoard &rhs) {
 	}
 
 	return out;
+}
+std::istream& operator>>(std::istream& in, CBoard& rhs) {
+	unsigned rows, cols, enemies;
+	in >> rows;
+	rhs.setRows(rows);
+	in >> cols;
+	rhs.setColumns(cols);
+	in >> enemies;
+	rhs.setCountEnemy(enemies);
+
+	return in;
 }

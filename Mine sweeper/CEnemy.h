@@ -1,19 +1,19 @@
-//Mine.h
 #ifndef ENEMY_H
 #define ENEMY_H
 #include <iostream>
+#include "CPlayer.h"
 
 class CEnemy {
 public: 
-	friend std::ostream& operator<<(std::ostream&, const CEnemy&);
-	friend std::istream& operator>>(std::istream&, CEnemy&);
-
 	//constructors
 	CEnemy();
+	CEnemy(unsigned);
 	CEnemy(unsigned, char);
-
+	//copy constructor
+	CEnemy(const CEnemy&);
+	CEnemy& operator=(const CEnemy&);
 	//destructor
-	~CEnemy();
+	virtual ~CEnemy();
 
 	//Setters - mutators
 	int setCount(unsigned);
@@ -23,16 +23,16 @@ public:
 	unsigned getCount() const;
 	char getIcon() const;
 
+	CEnemy operator+(const CEnemy&);
+	virtual	std::ostream& ins(std::ostream&) const;
+	virtual std::istream& ext(std::istream&);
+	virtual int poison(CPlayer&) const;
 private:
 	unsigned count;
 	char icon;
-
 };
 
  std::ostream& operator<<(std::ostream&, const CEnemy&);
  std::istream& operator>>(std::istream&, CEnemy&);
 
 #endif
-
-
-
