@@ -1,14 +1,14 @@
 #include "DeadlyEnemy.h"
 
-DeadlyEnemy::DeadlyEnemy() :CEnemy(), sound(500), duration(1000), power(2) {};
+DeadlyEnemy::DeadlyEnemy() :CEnemy(), sound(500), duration(1000), power(2) {  };
 DeadlyEnemy::DeadlyEnemy(unsigned count, char icon, int sound, int duration, unsigned power) : CEnemy(count, icon), sound(sound),
-duration(duration), power(power) {};
+duration(duration), power(power) {
+};
 
 DeadlyEnemy::DeadlyEnemy(const DeadlyEnemy& rhs):CEnemy(rhs){
 	sound = rhs.sound;
 	duration = rhs.duration;
 	power = rhs.power;
-
 };
 
 DeadlyEnemy::~DeadlyEnemy() {
@@ -22,6 +22,7 @@ DeadlyEnemy& DeadlyEnemy::operator=(const DeadlyEnemy& rhs) {
 		this->duration = duration;
 		this->power = power;
 	}
+	instancesCount++;
 	return *this;
 };
 int DeadlyEnemy::getSound() const {
@@ -59,10 +60,14 @@ std::istream& DeadlyEnemy::ext(std::istream& in) {
 	in >> sound >> duration >> power;
 	return in;
 }
-
+//virtual functions
 int DeadlyEnemy::poison(CPlayer& player) const {
-	player.setState(false);
+	player.setState(InAcoma);
 	player.setLives(player.getLives() - 1);
+	return 0;
+}
+int DeadlyEnemy::eliminate(CPlayer& player) const {
+	player.setLives(player.getLives() + 2);
 	return 0;
 }
 

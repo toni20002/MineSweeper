@@ -7,7 +7,7 @@
 using namespace std;
 
 int main() {
-	CEnemy enemy(10, '!');
+/*	CEnemy enemy(10, '!');
 	cout << enemy << endl;
 	CEnemy enemy2, enemy3;
 	cout << enemy2 << endl;
@@ -84,6 +84,23 @@ int main() {
 	cin >> bbb;
 	bbb.createBoard(bbb.getRows(), bbb.getColumns(), bbb.getCountEnemy());
 	cout << "BBB after createBoard: " << endl;
-	cout << bbb;
+	cout << bbb;*/
+	/*CBoard board;
+	 board.createBoardWithEnemies(5,5,5);
+	 cout << board;
+	 CBoard board2;
+	 board2 = board;
+	 cout << board2;*/
+/*	 CPlayer player1;
+	 cin >> player1;
+	// player1.setState(Dead);
+	 //cout << player1.getState() << endl;
+	 cout << player1;*/
+
+	CEnemy enemy;
+	CEnemy enemy2(20, 'K');
+	DeadlyEnemy dEnemy;
+	SuperDeadlyEnemy sdEnemy;
+	cout << enemy2.getInstances() << endl;
 	return 0;
 }

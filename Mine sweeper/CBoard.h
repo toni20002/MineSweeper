@@ -7,8 +7,6 @@
 
 class CBoard {
 	
-	friend std::ostream& operator<<(std::ostream&, const CBoard&);
-
 public:
 	CBoard();
 	CBoard(unsigned);
@@ -33,12 +31,14 @@ public:
 	int setRows(unsigned);
 	int setCountEnemy(unsigned);
 
+	std::ostream& ins(std::ostream&) const;
+	std::istream& ext(std::istream&);
+
 	
 private:
 	int ** viewBoard;
 	int ** checkBoard;
 	unsigned columns, rows, countEnemy;
-	unsigned countEnemy;
 	CEnemy ** enemies; // dynamic array of pointers
 };
 

@@ -1,5 +1,5 @@
 #include "SuperDeadlyEnemy.h"
-SuperDeadlyEnemy::SuperDeadlyEnemy():DeadlyEnemy() {}
+SuperDeadlyEnemy::SuperDeadlyEnemy():DeadlyEnemy(), multiPower(100) {}
 
 SuperDeadlyEnemy::SuperDeadlyEnemy(unsigned count, char icon, int sound, int duration, unsigned power, int multiPower) : DeadlyEnemy(count, icon, sound, duration, power)
 , multiPower(multiPower) {}
@@ -29,17 +29,21 @@ std::istream& SuperDeadlyEnemy::ext(std::istream& in) {
 	return in;
 }
 
-int SuperDeadlyEnemy::poison(CPlayer& player)const {
-	player.setState(false);
-	player.setLives(0);
-	player.setScore(player.getScore() - 10);
-	return 0;
-}
-
-
 int SuperDeadlyEnemy::getMultiPower() const {
 	return multiPower;
 }
 int SuperDeadlyEnemy::setMultiPower(int multiPower) {
 	this->multiPower = multiPower;
+	return 0;
+}
+//virtual functions 
+int SuperDeadlyEnemy::poison(CPlayer& player)const {
+	player.setState(Dead);
+	player.setLives(0);
+	player.setScore(player.getScore() - 10);
+	return 0;
+}
+int SuperDeadlyEnemy::eliminate(CPlayer& player) const {
+	player.setLives(player.getLives() + 3);
+	return 0;
 }

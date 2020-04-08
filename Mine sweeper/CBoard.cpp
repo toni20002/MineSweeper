@@ -2,6 +2,7 @@
 #include <iostream>
 #include <random>
 #include <time.h>
+#include <typeinfo>
 
 
 //default
@@ -37,9 +38,15 @@ CBoard::CBoard(unsigned rows, unsigned columns):rows(rows), columns(columns) {
 	}
 
 };
-//TODO
-CBoard::CBoard(unsigned rows, unsigned columns, unsigned countEnemies):rows(rows), columns(columns), countEnemies(countEnemies) {
-
+//TODO - done
+CBoard::CBoard(unsigned rows, unsigned columns, unsigned countEnemies):rows(rows), columns(columns), countEnemy(countEnemies) {
+	viewBoard = new int *[rows];
+	checkBoard = new int*[rows];
+	for (int i = 0; i < rows; i++)
+	{
+		viewBoard[i] = new int[columns];
+		checkBoard[i] = new int[columns];
+	}
 }
 
 
@@ -60,13 +67,24 @@ CBoard::~CBoard() {
 		}
 		delete[] checkBoard;
 	}
+
+	if (enemies != nullptr)
+	{
+		for (int i = 0; i < countEnemy; i++)
+		{
+			delete[] enemies[i];
+		}
+		delete[] enemies;
+		enemies = nullptr;
+	}
 };
 
 //Copy constructor
 CBoard::CBoard(const CBoard & rhs) {
-	std::cout << "Copy constructor invoked! " << std::endl;
+	std::cout << "Copy constructor for CBoard invoked! " << std::endl;
 	rows = rhs.rows;
 	columns = rhs.columns;
+	countEnemy = rhs.countEnemy;
 
 	viewBoard = new int *[rhs.rows];
 	checkBoard = new int *[rhs.rows];
@@ -83,6 +101,12 @@ CBoard::CBoard(const CBoard & rhs) {
 			checkBoard[l][m] = rhs.checkBoard[l][m];
 		}
 	}
+	enemies = new CEnemy *[rhs.countEnemy];
+	for (int i = 0; i < rhs.countEnemy; i++)
+	{
+		enemies[i] = new CEnemy();
+	//	enemies[i] = rhs.enemies[i];
+	}
 }
 
 CBoard& CBoard::operator=(const CBoard &rhs) {
@@ -90,12 +114,20 @@ CBoard& CBoard::operator=(const CBoard &rhs) {
 	{
 		rows = rhs.rows;
 		columns = rhs.columns;
+		countEnemy = rhs.countEnemy;
 
 		delete[] viewBoard;
 		viewBoard = new int *[rows];
 
 		delete[] checkBoard;
 		checkBoard = new int *[rows];
+
+		delete[] enemies;
+		enemies = new CEnemy*[countEnemy];
+		for (int i = 0; i < rhs.countEnemy; i++)
+		{
+			enemies[i] = new CEnemy();
+		}
 
 		for (int i = 0; i < rhs.columns; i++)
 		{
@@ -258,17 +290,21 @@ int CBoard::createBoardWithEnemies(unsigned rows, unsigned columns, unsigned cou
 		randRow = rand() % rows + 0;
 		randCol = rand() % columns + 0;
 
-		if (viewBoard[randRow][randCol] != -1)
+		if (viewBoard[randRow][randCol] != -1 && viewBoard[randRow][randCol] != -2 && viewBoard[randRow][randCol] != -3)
 		{
-			if (dynamic_cast<CEnemy*>(enemies[index]) != NULL)
+			//if (dynamic_cast<CEnemy*>(enemies[index]) != NULL)
+			//std::cout << typeid(*enemies[index]).name();
+		//	std::cout << typeid(SuperDeadlyEnemy).name();
+			
+			if (typeid(CEnemy) == typeid(*enemies[index]))
 			{
 				viewBoard[randRow][randCol] = -1;
 			}
-			if (typeid(DeadlyEnemy*) == typeid(enemies[index]))
+			if (typeid(DeadlyEnemy)== typeid(*enemies[index]))
 			{
 				viewBoard[randRow][randCol] = -2;
 			}
-			if (typeid(SuperDeadlyEnemy*) == typeid(enemies[index]))
+			if (typeid(SuperDeadlyEnemy) == typeid(*enemies[index]))
 			{
 				viewBoard[randRow][randCol] = -3;
 			}
@@ -295,7 +331,30 @@ int CBoard::createBoardWithEnemies(unsigned rows, unsigned columns, unsigned cou
 	}
 
 	enemyOnField = 0;
-
+	for (int k = 0; k < rows; k++)
+	{
+		for (int l = 0; l < columns; l++)
+		{
+			if (viewBoard[k][l] == -1 || viewBoard[k][l] == -2 || viewBoard[k][l] == -3)
+			{
+				for (int ii = ((k == 0) ? k : k - 1); ii <= ((k == rows - 1) ? k : k + 1); ii++)
+				{
+					for (int jj = ((l == 0) ? l : l - 1); jj <= ((l == columns - 1) ? l : l + 1); jj++)
+					{
+						if (viewBoard[ii][jj] != -1 && viewBoard[ii][jj] != -2 && viewBoard[ii][jj] != -3)
+						{
+							viewBoard[ii][jj]++;
+						}
+					}
+				}
+				enemyOnField++;
+			}
+			if (enemyOnField == countEnemy)
+			{
+				return 0;
+			}
+		}
+	}
 	return 0;
 }
 
@@ -335,27 +394,43 @@ int CBoard::setCountEnemy(unsigned countEnemy) {
 	this->countEnemy = countEnemy;
 	return 0;
 }
+std::ostream& CBoard::ins(std::ostream& out) const {
+	for (int i = 0; i < rows; i++)
+	{
+		for (int k = 0; k < columns; k++)
+		{
+			 out << viewBoard[i][k] << "\t";
+		}
+		 out << "\n";
+	}
+	return out;
+}
+std::istream& CBoard::ext(std::istream& in) {
+	unsigned rows, cols, enemies;
+	in >> rows;
+	in >> cols;
+	in >> enemies;
+
+	setRows(rows);
+	setColumns(cols);
+	setCountEnemy(enemies);
+
+	return in;
+}
 
 std::ostream & operator<<(std::ostream &out, const CBoard &rhs) {
-	for (int i = 0; i < rhs.rows; i++)
+	/*for (int i = 0; i < rhs.rows; i++)
 	{
 		for (int k = 0; k < rhs.columns; k++)
 		{
 			out << rhs.viewBoard[i][k] << "\t";
 		}
 		out << "\n";
-	}
-
-	return out;
+	}*/
+	return rhs.ins(out);
 }
 std::istream& operator>>(std::istream& in, CBoard& rhs) {
-	unsigned rows, cols, enemies;
-	in >> rows;
-	rhs.setRows(rows);
-	in >> cols;
-	rhs.setColumns(cols);
-	in >> enemies;
-	rhs.setCountEnemy(enemies);
+	
 
-	return in;
+	return rhs.ext(in);
 }

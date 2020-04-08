@@ -3,29 +3,30 @@
 #include <cstring>
 
 //Default constructor
-CPlayer::CPlayer():lives(2), score(0), state(true), nick(new char[10]) {
+CPlayer::CPlayer():lives(2), score(0), state(Frown), nick(new char[10]) {
 	strcpy_s(nick, 10, "Goshko" );
 }
 
 //Basic - first constructor
-CPlayer::CPlayer(const char * nick):lives(2), score(0), state(true), nick(new char[strlen(nick)+1]) {
+CPlayer::CPlayer(const char * nick):lives(2), score(0), state(Smiled), nick(new char[strlen(nick)+1]) {
 	strcpy_s(this->nick, strlen(nick) + 1, nick);
 
 }
-CPlayer::CPlayer(unsigned lives, unsigned score, bool state, const char * nick):nick(new char[strlen(nick)+1]) {
+CPlayer::CPlayer(unsigned lives, unsigned score, playerState state, const char * nick):nick(new char[strlen(nick)+1]) {
 	this->score = (score >= 0) ? score : 0;
 	this->lives = (lives <= 5) ? lives : 5;
-	this->state = (lives > 0 && !state) ? true : state;
+	//this->state = (lives > 0 && !state) ? true : state;
+	this->state = state;
 	strcpy_s(this->nick, strlen(nick)+1 , nick);
 }
 
 
-CPlayer::CPlayer(bool state, const char * nick):nick(new char[strlen(nick)+1]), score(0), lives(2) {
+CPlayer::CPlayer(playerState state, const char * nick):nick(new char[strlen(nick)+1]), score(0), lives(2) {
 	strcpy_s(this->nick, strlen(nick) + 1, nick);
-	if (!state)
+	/*if (!state)
 	{
 		this->state = true;
-	}
+	}*/
 	this->state = state;
 }
 
@@ -70,8 +71,8 @@ int CPlayer::setLives(unsigned lives) {
 	this->lives = lives;
 	return 0;
 }
-int CPlayer::setState(bool state) {
-	if (!state && lives == 0) this->state = state;
+int CPlayer::setState(playerState state) {
+//	if (!state && lives == 0) this->state = state;
 	this->state = state;
 	return 0;
 }
@@ -96,7 +97,7 @@ unsigned CPlayer::getLives() const {
 	return lives;
 }
 
-bool CPlayer::getState() const {
+playerState CPlayer::getState() const {
 	return state;
 }
 
@@ -112,18 +113,53 @@ int CPlayer::print() const {
 	return 0;
 }
 std::ostream& CPlayer::ins(std::ostream& out) const {
-	return out << "Nick: " << nick << std::endl
-		<< "Lives: " << lives << std::endl
-		<< "Score: " << score << std::endl
-		<< "State: " << (state ? ":-P" : ":-(") << std::endl;
-
+	switch (state)
+	{
+	case Smiled:
+		return out << "Nick: " << nick << std::endl
+			<< "Lives: " << lives << std::endl
+			<< "Score: " << score << std::endl
+			<< "State: :-)" << std::endl;
+		break;
+	case Frown:
+		return out << "Nick: " << nick << std::endl
+			<< "Lives: " << lives << std::endl
+			<< "Score: " << score << std::endl
+			<< "State: :-(" << std::endl;
+		break;
+	case Asleep:
+		return out << "Nick: " << nick << std::endl
+			<< "Lives: " << lives << std::endl
+			<< "Score: " << score << std::endl
+			<< "State: zZz" << std::endl;
+		break;
+	case InAcoma:
+		return out << "Nick: " << nick << std::endl
+			<< "Lives: " << lives << std::endl
+			<< "Score: " << score << std::endl
+			<< "State: X-(" << std::endl;
+		break;
+	case Dead:
+		return out << "Nick: " << nick << std::endl
+			<< "Lives: " << lives << std::endl
+			<< "Score: " << score << std::endl
+			<< "State: R.I.P - " << nick << std::endl;
+		break;
+	default:
+		break;
+	}
+	
+	//(state ? ":-P" : ":-(")
 }
 
 std::istream& CPlayer::ext(std::istream& in) {
 	char * name = new char[30];
 	in >> name;
 	setNick(name);
-	in >> lives >> score >> state;
+	int inputState;
+	in >> lives >> score >> inputState;
+//	state = static_cast<playerState>(inputState);
+	state = playerState(inputState);
 	if (name != nullptr)
 	{
 		delete[] name;
